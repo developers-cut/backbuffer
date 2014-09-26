@@ -1,0 +1,91 @@
+mixin task-view
+    div Title: {{ current_data.title }}
+    p Description: {{ current_data.description }}
+    | Status:
+    | {% if current_data.closed %}
+    | Closed
+    | {% else %}
+    | Open
+    | {% endif %}
+    form(action="/delete", method="post")
+        input(type="hidden", name="key", value!="{{ current_data.key }}")
+        input(type="submit", value="Delete")
+
+
+mixin task-list
+    div.row.clear-fix
+        div.pull-left
+            b {{ user.nickname() }}
+            | has tasks:
+        div.pull-right Filter (not working)!
+    | {% for word in data %}
+    div.row.word
+        | {% if word.key == current_data.key %}
+        a(href!="/") {{ word.title }}
+        | {% else %}
+        a(href!="/?data={{ word.key.urlsafe() }}") {{ word.title }}
+        | {% endif %}
+
+        | {% if word.closed %}
+        span.closed (Closed)
+        | {% else %}
+        span.open (Open)
+        | {% endif %}
+    | {% endfor %}
+
+
+mixin add-task-form
+    form(action="/add", method="post")
+        div New task:
+        div
+            label Title:
+            input(name="title")
+        div
+            label Description:
+            textarea(name="description", rows="3", cols="60")
+        div: input(type="submit", value="Add task")
+
+
+mixin task-list-only
+    div.col-sm-6.col-sm-offset-3.col-xs-12
+        +task-list
+        +add-task-form
+        hr
+        a(href!="{{ url|safe }}") {{ url_linktext }}
+
+
+mixin task-details
+    div.col-sm-6.col-xs-12
+        +task-list
+        +add-task-form
+        hr
+        a(href!="{{ url|safe }}") {{ url_linktext }}
+    div.col-sm-6.col-xs-12
+        +task-view
+
+doctype
+| {% autoescape true %}
+html
+    head
+        link(href="/css/bootstrap.min.css", rel="stylesheet", type="text/css")
+        style.
+            .word {
+                padding: 10px;
+            }
+            .open {
+                color: green;
+            }
+            .closed {
+                color: gray;
+            }
+    body
+        div.container-fluid
+            div.row
+                | {% if current_data %}
+                +task-details
+                | {% else %}
+                +task-list-only
+                | {% endif %}
+    script(src="//code.jquery.com/jquery-2.1.1.min.js")
+    script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+| {% endautoescape %}
