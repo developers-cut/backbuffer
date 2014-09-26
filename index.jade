@@ -1,4 +1,25 @@
-mixin task-view
+mixin task-edit
+    form(action="/edit", method="post")
+        div
+            label Title:
+            input(name="title", value!="{{ current_data.title }}")
+        div
+            label Description:
+            textarea(name="description", rows="3", cols="60").
+                {{ current_data.description }}
+        div
+            label Closed
+            | {% if current_data.closed %}
+            input(type="checkbox", name="closed", checked="checked")   
+            | {% else %}
+            input(type="checkbox", name="closed")   
+            | {% endif %}
+        input(type="hidden", name="data",
+              value!="{{ current_data.key.urlsafe() }}")
+        input(type="submit", value="Save")
+
+
+mixin task-display
     div Title: {{ current_data.title }}
     p Description: {{ current_data.description }}
     | Status:
@@ -7,7 +28,20 @@ mixin task-view
     | {% else %}
     | Open
     | {% endif %}
-    form(action="/delete?", method="post")
+    form(action="/", method="get")
+        input(type="hidden", name="edit", value="true")
+        input(type="hidden", name="data",
+              value!="{{ current_data.key.urlsafe() }}")
+        input(type="submit", value="Edit")
+
+
+mixin task-view
+    | {% if edit %} 
+    +task-edit
+    | {% else %}
+    +task-display
+    | {% endif %}
+    form(action="/delete", method="post")
         input(type="hidden", name="data",
               value!="{{ current_data.key.urlsafe() }}")
         input(type="submit", value="Delete")

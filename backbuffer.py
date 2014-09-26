@@ -31,6 +31,7 @@ class MainPage(webapp2.RequestHandler):
             'user': users.get_current_user(),
             'data': data,
             'current_data': current_data,
+            'edit': self.request.get('edit'),
             'url': users.create_logout_url(self.request.uri),
             'url_linktext': 'Logout',
         }
@@ -56,6 +57,17 @@ class Backbuffer:
 
     class Edit(webapp2.RequestHandler):
         def post(self):
+            if self.request.get('data'):
+                data = ndb.Key(urlsafe=self.request.get('data')).get()
+                data.title = self.request.get('title')
+                data.description = self.request.get('description')
+
+                if self.request.get('closed'):
+                    data.closed = True
+                else:
+                    data.closed = False
+
+                data.put()
             self.redirect('/')
 
     def get_data(self, max_data_length=10, current_data_urlsafe_key=None):
