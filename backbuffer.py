@@ -70,10 +70,10 @@ class Backbuffer:
                 data.put()
             self.redirect('/')
 
-    def get_data(self, max_data_length=10, current_data_urlsafe_key=None):
+    def get_data(self, current_data_urlsafe_key=None):
         data_query = Data.query(ancestor=current_user_key()).order(
             -Data.date_added)
-        data = data_query.fetch(max_data_length)
+        data = data_query.fetch()
 
         current_data = None
         if current_data_urlsafe_key:
