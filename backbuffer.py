@@ -72,7 +72,7 @@ class Backbuffer:
 
     def get_data(self, current_data_urlsafe_key=None):
         data_query = Data.query(ancestor=current_user_key()).order(
-            -Data.date_added)
+            Data.closed, -Data.date_added)
         data = data_query.fetch()
 
         current_data = None
