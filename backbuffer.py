@@ -50,6 +50,8 @@ class Backbuffer:
 
     class Delete(webapp2.RequestHandler):
         def post(self):
+            if self.request.get('data'):
+                ndb.Key(urlsafe=self.request.get('data')).delete()
             self.redirect('/')
 
     class Edit(webapp2.RequestHandler):

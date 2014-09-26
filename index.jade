@@ -7,8 +7,9 @@ mixin task-view
     | {% else %}
     | Open
     | {% endif %}
-    form(action="/delete", method="post")
-        input(type="hidden", name="key", value!="{{ current_data.key }}")
+    form(action="/delete?", method="post")
+        input(type="hidden", name="data",
+              value!="{{ current_data.key.urlsafe() }}")
         input(type="submit", value="Delete")
 
 
