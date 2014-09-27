@@ -8,11 +8,16 @@ mixin task-edit
             textarea(name="description", rows="3", cols="60").
                 {{ current_data.description }}
         div
+            label Labels:
+            | {% for label in current_data.labels %}
+            li: input(name="label", value!="{{ label }}")
+            | {% endfor %}
+        div
             label Closed
             | {% if current_data.closed %}
-            input(type="checkbox", name="closed", checked="checked")   
+            input(type="checkbox", name="closed", checked="checked")
             | {% else %}
-            input(type="checkbox", name="closed")   
+            input(type="checkbox", name="closed")
             | {% endif %}
         input(type="hidden", name="data",
               value!="{{ current_data.key.urlsafe() }}")
@@ -22,6 +27,11 @@ mixin task-edit
 mixin task-display
     div Title: {{ current_data.title }}
     p Description: {{ current_data.description }}
+    ul
+        div Labels:
+        | {% for label in current_data.labels %}
+        li {{ label }}
+        | {% endfor %}
     | Status:
     | {% if current_data.closed %}
     | Closed
@@ -36,7 +46,7 @@ mixin task-display
 
 
 mixin task-view
-    | {% if edit %} 
+    | {% if edit %}
     +task-edit
     | {% else %}
     +task-display
@@ -78,11 +88,14 @@ mixin add-task-form
         div
             label Description:
             textarea(name="description", rows="3", cols="60")
+        div
+            label Label:
+            input(name="label")
         div: input(type="submit", value="Add task")
 
 
 mixin task-list-only
-    div.col-sm-6.col-sm-offset-3.col-xs-12
+    div.col-md-6.col-md-offset-3.col-xs-12
         +task-list
         +add-task-form
         hr
@@ -90,18 +103,19 @@ mixin task-list-only
 
 
 mixin task-details
-    div.col-sm-6.col-xs-12
+    div.col-md-6.col-xs-12
+        +task-view
+    div.col-md-6.col-xs-12
         +task-list
         +add-task-form
         hr
         a(href!="{{ url|safe }}") {{ url_linktext }}
-    div.col-sm-6.col-xs-12
-        +task-view
 
 doctype
 | {% autoescape true %}
 html
     head
+        title Backbuffer
         link(href="/css/bootstrap.min.css", rel="stylesheet", type="text/css")
         style.
             .word {

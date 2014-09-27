@@ -21,6 +21,7 @@ class Data(ndb.Model):
     description = ndb.TextProperty()
     date_added = ndb.DateTimeProperty(auto_now_add=True)
     closed = ndb.BooleanProperty(default=False)
+    labels = ndb.StringProperty(repeated=True)
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -45,6 +46,7 @@ class Backbuffer:
             data = Data(parent=current_user_key())
             data.title = self.request.get('title')
             data.description = self.request.get('description')
+            data.labels = [self.request.get('label')]
             data.put()
 
             self.redirect('/')
@@ -61,6 +63,7 @@ class Backbuffer:
                 data = ndb.Key(urlsafe=self.request.get('data')).get()
                 data.title = self.request.get('title')
                 data.description = self.request.get('description')
+                data.labels = [self.request.get('label')]
 
                 if self.request.get('closed'):
                     data.closed = True
