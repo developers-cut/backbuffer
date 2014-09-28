@@ -88,9 +88,11 @@ mixin add-task-form
         div
             label Description:
             textarea(name="description", rows="3", cols="60")
-        div
+
+        div#label-fields-container
             label Label:
             input(name="label")
+        button#add-label-button(type="button") Add label
         div: input(type="submit", value="Add task")
 
 
@@ -137,4 +139,6 @@ html
                 | {% endif %}
     script(src="//code.jquery.com/jquery-2.1.1.min.js")
     script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+    script(src="/scripts/backbuffer.dart", type="application/dart")
+    script(src="/scripts/dart.js")
 | {% endautoescape %}

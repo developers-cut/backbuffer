@@ -7,6 +7,10 @@ threadsafe: true
 handlers:
 - url: /css/*
   static_dir: public/css
+- url: /scripts/*
+  static_dir: public/scripts
+- url: /packages
+  static_dir: packages
 - url: /.*
   script: backbuffer.application
   login: required

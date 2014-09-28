@@ -17,10 +17,10 @@ def current_user_key():
     return ndb.Key('User', users.get_current_user().user_id())
 
 class Data(ndb.Model):
-    title = ndb.StringProperty()
+    title = ndb.StringProperty(required=True)
     description = ndb.TextProperty()
-    date_added = ndb.DateTimeProperty(auto_now_add=True)
-    closed = ndb.BooleanProperty(default=False)
+    date_added = ndb.DateTimeProperty(required=True, auto_now_add=True)
+    closed = ndb.BooleanProperty(required=True, default=False)
     labels = ndb.StringProperty(repeated=True)
 
 class MainPage(webapp2.RequestHandler):
@@ -46,7 +46,7 @@ class Backbuffer:
             data = Data(parent=current_user_key())
             data.title = self.request.get('title')
             data.description = self.request.get('description')
-            data.labels = [self.request.get('label')]
+            data.labels = self.request.get_all('label')
             data.put()
 
             self.redirect('/')
@@ -63,7 +63,7 @@ class Backbuffer:
                 data = ndb.Key(urlsafe=self.request.get('data')).get()
                 data.title = self.request.get('title')
                 data.description = self.request.get('description')
-                data.labels = [self.request.get('label')]
+                data.labels = self.request.get_all('label')
 
                 if self.request.get('closed'):
                     data.closed = True
