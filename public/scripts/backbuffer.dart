@@ -1,6 +1,26 @@
 // Backbuffer.dart
 // Main Dart file for Backbuffer.
 import 'dart:html';
+import 'dart:convert';
+
+// Represents Data locally.
+class DataModel {
+    String title;
+    String description;
+    bool closed;
+    List<String> label_list;
+}
+
+class TaskListViewController {
+    List<Data> data_list;
+
+    // Constructor loads
+    TaskListViewController() {
+
+    }
+}
+
+
 
 ButtonElement add_label_button;
 Element label_fields_container;
