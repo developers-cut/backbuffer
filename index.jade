@@ -80,20 +80,24 @@ mixin task-list
 
 
 mixin add-task-form
-    form(action="/add", method="post")
-        div New task:
-        div
-            label Title:
-            input(name="title")
-        div
-            label Description:
-            textarea(name="description", rows="3", cols="60")
+    div.row
+        form(action="/add", method="post")
+            div.col-xs-12 Add a new task:
+            div.col-xs-12
+                label Title:
+                input.form-control(name="title")
+            div.col-xs-12
+                label Description:
+                textarea.form-control(name="description", rows="3", cols="60")
 
-        div#label-fields-container
-            label Label:
-            input(name="label")
-        button#add-label-button(type="button") Add label
-        div: input(type="submit", value="Add task")
+            div.col-xs-12
+                label Labels:
+            div#label-fields-container.col-xs-6
+                input.form-control(name="label")
+            div.col-xs-2
+                button#add-label-button.form-control(type="button") Add label
+            div.col-xs-offset-3.col-xs-6
+                input.btn-primary.form-control(type="submit", value="Add task")
 
 
 mixin task-list-only
